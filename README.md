@@ -13,7 +13,7 @@ There are two ways of using Inspect CharXiv, from pypi as a dependency of your o
 If you are using it from pypi, install the package and its dependencies via:
 
 ```bash
-pip install inspect-charxiv
+pip install inspect_charxiv
 ```
 
 If you are using Inspect CharXiv in its repository, start by installing the necessary dependencies with:
