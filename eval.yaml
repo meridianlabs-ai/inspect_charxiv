@@ -1,0 +1,24 @@
+title: 'CharXiv: Charting Gaps in Realistic Chart Understanding in Multimodal LLMs'
+description: | 
+  Test for chart understanding in multimodal LLMs using real data points from arXiv with a suite of 5000 chart description and informational reasoning questions.
+arxiv: https://arxiv.org/abs/2406.18521
+group: Multimodal Evaluation
+contributors: 
+  - jchengjr
+version: "1-A"
+tasks: 
+  - name: charxiv
+    dataset_samples: 5000
+tags: 
+  - Multimodal
+
+external_assets:
+  - type: huggingface
+    source: princeton-nlp/CharXiv
+    fetch_method: load_dataset
+    state: pinned
+
+human_baseline:
+  metric: accuracy
+  score: 89.78
+  source: https://charxiv.github.io/#leaderboard

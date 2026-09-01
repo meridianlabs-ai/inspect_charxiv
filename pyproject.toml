@@ -1,0 +1,182 @@
+# MANAGED FILE - Quality tool configs are managed. See MANAGED_FILES.md
+# USER: Sections marked with "# USER:" require your customization.
+
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm[toml]>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+fallback_version = "0.0.0+unknown"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["inspect_charxiv*"]
+
+[tool.setuptools.package-data]
+"*" = ["eval.yaml"]
+
+[tool.ruff]
+extend-exclude = [
+    "agent_artefacts",
+]
+src = ["src"]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # flake8
+    "D",      # pydocstyle
+    "I",      # isort
+    "SIM101", # duplicate isinstance
+    "YTT",    # flake8-2020
+    "LOG",    # flake8-logging
+    "NPY",    # numpy-specific-rules-npy
+    "PLE",    # pylint error
+    "PLR",    # pylint refactor
+    "PLW",    # pylint warning
+    "UP006",  # Prevent List and Dict, use list and dict instead.
+    "UP007",  # Prevent Union[X, Y], use [X | Y] instead.
+    "UP045",  # Prevent Optional[X], use X | None instead.
+    "FURB",   # refurb
+    "TID252", # relative-imports
+]
+ignore = [
+    "E203",    # whitespace-before-punctuation
+    "E501",    # line-too-long
+    "D10",     # missing docstrings
+    "D212",    # docstring multi-line-summary-first-line
+    "D415",    # docstring missing-terminal-punctuation
+    "PLR0911", # Too many return statements
+    "PLR0912", # Too many branches
+    "PLR0913", # Too many arguments in function definition
+    "PLR0915", # Too many statements
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/{tests,examples}/*" = ["PLR2004"]  # Allow magic numbers in tests and examples
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-rA --color=yes --durations=10"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+log_level = "WARNING"
+env_files = [".env"]
+markers = [
+    "dataset_download: tests that download datasets (enabled by default; disable with -m 'not dataset_download' or RUN_DATASET_DOWNLOAD_TESTS=0)",
+    "huggingface: marks tests that depend on downloading a model from Hugging Face",
+    "slow: marks tests that are slow to run; enable with --runslow or RUN_SLOW_TESTS=1",
+    "docker: marks tests that pull or build docker images",
+    "posix_only: marks tests that require POSIX systems (Linux/macOS)",
+]
+
+[tool.mypy]
+exclude = [
+    "build",
+    "agent_artefacts",
+]
+warn_unused_ignores = true
+no_implicit_reexport = true
+strict_equality = true
+warn_redundant_casts = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = ["examples.*", "utils.*"]
+warn_return_any = true
+disallow_untyped_defs = true
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+extra_checks = true
+disable_error_code = "unused-ignore"
+
+[[tool.mypy.overrides]]
+module = ["datasets", "datasets.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# Test files import these helpers via runtime sys.path manipulation, so
+# mypy can't resolve them statically. Treat them as untyped.
+module = ["add_readme_section", "generate_readmes"]
+ignore_missing_imports = true
+
+[project]
+name = "inspect_charxiv"
+description = "Implementation of the CharXiv Multimodal LLM Eval using Inspect."
+authors = [{ name = "Noah Cheng" }]
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dynamic = ["version"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "anthropic>=0.121.0",
+    "datasets>=5.0.1",
+    "inspect_ai>=0.3.158",
+    "mypy>=2.3.0",
+    "openai>=2.53.0",
+    "pillow>=12.3.0",
+    "pyyaml>=5.1.0",
+    # USER: Add your eval's dependencies here
+]
+
+[project.urls]
+# USER: Update these URLs
+"Source Code" = "https://github.com/meridianlabs-ai/inspect_charxiv"
+"Issue Tracker" = "https://github.com/meridianlabs-ai/inspect_charxiv/issues"
+
+# Register each evaluation so Inspect can discover it.
+# Example (uncomment and adapt):
+#   my_eval = "my_eval"
+#
+# This registers the "my_eval" package so that
+# `inspect eval my_eval/task_name` works. The __init__.py
+# should export your @task functions.
+# Note: examples are NOT registered -- only your evaluations under src/.
+[project.entry-points.inspect_ai]
+inspect_charxiv = "inspect_charxiv"
+
+[dependency-groups]
+dev = [
+    "inspect-scout>=0.3.0",  # llm_scanner API used by agent_artefacts/trajectory_analysis/inspect_scout/
+    "mypy",
+    "pre-commit",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-dotenv",
+    "pytest-mock",
+    "rich",
+    "ruff==0.13.2",
+    "toml",
+    "types-PyYAML",
+]
+
+[tool.check-wheel-contents]
+ignore = ["W005", "W009"]
+
+[tool.uv]
+environments = [
+    "python_version >= '3.11'",
+]
