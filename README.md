@@ -8,12 +8,10 @@ Contributed by [@jchengjr](https://github.com/jchengjr)
 
 ### Installation
 
-There are two ways of using Inspect CharXiv, from pypi as a dependency of your own project and as a standalone checked out GitHub repository.
-
-If you are using it from pypi, install the package and its dependencies via:
+Latest development version:
 
 ```bash
-pip install inspect_charxiv
+pip install git+https://github.com/meridianlabs-ai/inspect_charxiv.git
 ```
 
 If you are using Inspect CharXiv in its repository, start by installing the necessary dependencies with:
