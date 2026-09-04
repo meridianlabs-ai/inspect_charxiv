@@ -124,10 +124,6 @@ def convert_to_subplot_pos(
     return result
 
 
-# This needs to be blown up. We can use mathvista but it must be understood that when they get record[image] it's not the same as our record[image]. Their's refers to the path where ours are the actual bytes. If we can take the figure_path that they use, determine whether it's in our file location and if it's not: put it there using the decoded bytes from the dataset, then we can ensure that image actually corresponds to the classpath that we think it will.
-# TODO decide on implementation of the image conversion.
-# OPTION 1 is to take the image from huggingface and convert the image to a base64 string.
-# OPTION 2 is to store the image files in the repository, then convert the path used in the experiment to a path for finding the images in inspect.
 def convert_image(input_sample: dict[str, str | int | None]) -> str:
     IMAGE_BASE_DIR = INSPECT_EVALS_CACHE_PATH / "charxiv_images"
     image = Path(IMAGE_BASE_DIR / input_sample["figure_path"])
@@ -142,9 +138,6 @@ def convert_image(input_sample: dict[str, str | int | None]) -> str:
         img.save(image, format="JPEG")
 
     return str(image)
-
-
-# nothing actually puts the image in here with this solution
 
 
 def number_in_general_question_instructions(answer: float) -> str:
