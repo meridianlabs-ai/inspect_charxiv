@@ -22,9 +22,10 @@ def charxiv(subset: Literal["descriptive", "reasoning"] | None = None, category:
 
 @scorer(metrics=[accuracy(), stderr()])
 def charxiv_scorer() -> Scorer:
-    grader_model = get_model(role="grader", default="openai/gpt-4o")
-
     async def score(state: TaskState, target: Target) -> Score:
+        # Resolve the grader inside score() so that model roles passed to
+        # eval() from Python (not just --model-role on the CLI) are honoured.
+        grader_model = get_model(role="grader", default="openai/gpt-4o")
         answer = state.output.message.text
         result: str
         if state.metadata['is_descriptive']:
