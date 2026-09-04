@@ -27,11 +27,11 @@ from inspect_charxiv.dataset import FieldOfStudy, load_charxiv_dataset
 def charxiv(
     subset: Literal["descriptive", "reasoning"] | None = None,
     category: FieldOfStudy | list[FieldOfStudy] | None = None,
-    correct_targets: bool = True,
+    apply_corrections: bool = True,
 ) -> Task:
     return Task(
         dataset=load_charxiv_dataset(
-            subset=subset, category=category, correct_targets=correct_targets
+            subset=subset, category=category, apply_corrections=apply_corrections
         ),
         solver=[generate()],
         scorer=charxiv_scorer(),
