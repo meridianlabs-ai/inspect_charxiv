@@ -14,7 +14,7 @@ jobs:
         with:
           python-version: "3.12"
           enable-cache: true
-      - run: uv sync --locked
+      - run: uv sync --frozen
       - run: uv run ruff check .
       - run: uv run ruff format --check .
 
@@ -26,7 +26,7 @@ jobs:
         with:
           python-version: "3.12"
           enable-cache: true
-      - run: uv sync --locked
+      - run: uv sync --frozen
       - run: uv run mypy src
 
   test:
@@ -41,5 +41,5 @@ jobs:
         with:
           path: ~/.cache/huggingface
           key: hf-charxiv-${{ hashFiles('src/inspect_charxiv/dataset.py') }}
-      - run: uv sync --locked
+      - run: uv sync --frozen
       - run: uv run pytest
