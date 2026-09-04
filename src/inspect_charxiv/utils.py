@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 def convert_descriptive_question(
     question_index: int,
     input_sample: dict[str, str | int | None],
-    correct_targets: bool = True,
+    apply_corrections: bool = True,
 ) -> Sample:
     subplot_pos = convert_to_subplot_pos(
         input_sample["subplot_row"],
@@ -50,7 +50,7 @@ def convert_descriptive_question(
         target=correct_target(
             question_id=qid, target=input_sample.get(f"descriptive_a{question_index}")
         )
-        if correct_targets
+        if apply_corrections
         else input_sample.get(f"descriptive_a{question_index}"),
         id=qid,
         metadata={
@@ -63,7 +63,7 @@ def convert_descriptive_question(
 
 
 def convert_reasoning_question(
-    input_sample: dict[str, str | int | None], correct_targets: bool = True
+    input_sample: dict[str, str | int | None], apply_corrections: bool = True
 ) -> Sample:
     instructions: str
     if input_sample.get("reasoning_a_type") == NUMBER_IN_GENERAL_QUESTION:
@@ -91,7 +91,7 @@ def convert_reasoning_question(
     return Sample(
         input=message,
         target=correct_target(question_id=qid, target=input_sample.get("reasoning_a"))
-        if correct_targets
+        if apply_corrections
         else input_sample.get("reasoning_a"),
         id=qid,
         metadata={
@@ -127,8 +127,6 @@ def convert_to_subplot_pos(
 def convert_image(input_sample: dict[str, str | int | None]) -> str:
     IMAGE_BASE_DIR = INSPECT_EVALS_CACHE_PATH / "charxiv_images"
     image = Path(IMAGE_BASE_DIR / input_sample["figure_path"])
-    # TODO if the image doesn't exist, save it to our cache using the Bytes found in the input_sample['image']
-
     image_bytes = input_sample["image"]["bytes"]
 
     if not image.exists():

@@ -16,14 +16,14 @@ FieldOfStudy = Literal[
 def load_charxiv_dataset(
     subset: Literal["descriptive", "reasoning"] | None = None,
     category: FieldOfStudy | list[FieldOfStudy] | None = None,
-    correct_targets: bool = True,
+    apply_corrections: bool = True,
 ) -> Dataset:
     """Load the CharXiv dataset from Hugging Face and return it as a Dataset object. If subset is None, include the entire dataset. If subset is "descriptive", include the descriptive questions only. If subset is "reasoning", include only the reasoning questions. If categories is not None, filter the dataset to only include records with a field_of_study in categories."""
     dataset = hf_dataset(
         path="princeton-nlp/CharXiv",
         split="validation",
         sample_fields=_make_record_to_sample(
-            subset=subset, correct_targets=correct_targets
+            subset=subset, apply_corrections=apply_corrections
         ),
         revision="f441eb632fc62f6f777830a0f47619e6e86459b0",  # The latest commit to the CharXiv repo as of Aug 11, 2026.
     )
@@ -37,7 +37,7 @@ def load_charxiv_dataset(
 # record_to_sample factory to retain task parameters for record_to_sample function getting passed to hf_dataset.
 def _make_record_to_sample(
     subset: Literal["descriptive", "reasoning"] | None = None,
-    correct_targets: bool = True,
+    apply_corrections: bool = True,
 ) -> RecordToSample:
     """Return a sample_fields callable that converts a record to a list of Samples derived from the descriptive questions, reasoning questions, or both depending on the value of type. If type is None, return both descriptive and reasoning questions. If type is "descriptive", return only descriptive questions. If type is "reasoning", return only reasoning questions."""
 
@@ -47,25 +47,25 @@ def _make_record_to_sample(
                 convert_descriptive_question(
                     question_index=1,
                     input_sample=record,
-                    correct_targets=correct_targets,
+                    apply_corrections=apply_corrections,
                 ),
                 convert_descriptive_question(
                     question_index=2,
                     input_sample=record,
-                    correct_targets=correct_targets,
+                    apply_corrections=apply_corrections,
                 ),
                 convert_descriptive_question(
                     question_index=3,
                     input_sample=record,
-                    correct_targets=correct_targets,
+                    apply_corrections=apply_corrections,
                 ),
                 convert_descriptive_question(
                     question_index=4,
                     input_sample=record,
-                    correct_targets=correct_targets,
+                    apply_corrections=apply_corrections,
                 ),
                 convert_reasoning_question(
-                    input_sample=record, correct_targets=correct_targets
+                    input_sample=record, apply_corrections=apply_corrections
                 ),
             ]
         elif subset == "descriptive":
@@ -73,28 +73,28 @@ def _make_record_to_sample(
                 convert_descriptive_question(
                     question_index=1,
                     input_sample=record,
-                    correct_targets=correct_targets,
+                    apply_corrections=apply_corrections,
                 ),
                 convert_descriptive_question(
                     question_index=2,
                     input_sample=record,
-                    correct_targets=correct_targets,
+                    apply_corrections=apply_corrections,
                 ),
                 convert_descriptive_question(
                     question_index=3,
                     input_sample=record,
-                    correct_targets=correct_targets,
+                    apply_corrections=apply_corrections,
                 ),
                 convert_descriptive_question(
                     question_index=4,
                     input_sample=record,
-                    correct_targets=correct_targets,
+                    apply_corrections=apply_corrections,
                 ),
             ]
         elif subset == "reasoning":
             return [
                 convert_reasoning_question(
-                    input_sample=record, correct_targets=correct_targets
+                    input_sample=record, apply_corrections=apply_corrections
                 )
             ]
         else:
