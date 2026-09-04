@@ -1,6 +1,6 @@
 import os
 
-from anyio import Path
+from pathlib import Path
 from platformdirs import user_cache_dir
 
 DESCRIPTIVE_RESP_INST = {

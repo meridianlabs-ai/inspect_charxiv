@@ -28,8 +28,9 @@ def load_charxiv_dataset(
         revision="f441eb632fc62f6f777830a0f47619e6e86459b0",  # The latest commit to the CharXiv repo as of Aug 11, 2026.
     )
     if category is not None:
+        categories: set[FieldOfStudy] = {category} if isinstance(category, str) else set(category)
         dataset = dataset.filter(
-            lambda sample: sample.metadata.get("field_of_study") in category
+            lambda sample: sample.metadata.get("field_of_study") in categories
         )
     return dataset
 
