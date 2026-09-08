@@ -147,6 +147,8 @@ Grading instruction altered to accomodate the possibility of a multiple answer t
 
 - Altered grading instructions to reference JSON keys consistent with the desired output in the examples provided to the grader model.
 
+- Fixed a bug where a target with a decimal place followed by a 0 would ask the model for an exact integer rather than a single decimal place.
+
 ### [1-A] - 2026-09-04
 
 - Changed name of "apply_corrections" task parameter (previously was "correct_targets").

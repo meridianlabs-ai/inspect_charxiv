@@ -138,13 +138,12 @@ def convert_image(input_sample: dict[str, str | int | None]) -> str:
     return str(image)
 
 
-def number_in_general_question_instructions(answer: float) -> str:
-    if float(answer) % 1 == 0:
+def number_in_general_question_instructions(answer: str) -> str:
+    if (answer.find(".") == -1):
         return "* Your final answer must be an exact integer."
-
-    decimal_places = len(str(answer).split(".")[1])
-
-    return f"* Your final answer must be a number with {decimal_places} decimal places."
+    else:
+        decimal_places = len(answer.split(".")[1])
+        return f"* Your final answer must be a number with {decimal_places} decimal places."
 
 
 def correct_target(question_id: str, target: str) -> str:
