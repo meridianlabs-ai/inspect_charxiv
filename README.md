@@ -22,7 +22,7 @@ uv sync
 
 ### Running evaluations
 
-Now you can start evaluating models. For simplicity's sake, this section assumes you are using Inspect CharXiv from the standalone repo. If that's not the case and you are not using `uv` to manage dependencies in your own project, you can use the same commands with `uv run` dropped.
+Now you can start evaluating models. If you are not using `uv` to manage dependencies in your own project, you can use the same commands with `uv run` dropped.
 
 ```bash
 uv run inspect eval inspect_charxiv/charxiv --model openai/gpt-5-nano
@@ -71,7 +71,7 @@ See `uv run inspect eval --help` for all available options.
 
 - `category` (`Literal["econ", "math", "physics", "q-bio", "cs", "eess", "q-fin", "stat"] | list[Literal["econ", "math", "physics", "q-bio", "cs", "eess", "q-fin", "stat"]] | None`): Which category or categories to include in the eval. Categories are based off the 8 fields of study for the data represented in the charts used for samples. If no categories are specified, run will include all categories. (default: `None`)
 
-- `correct_targets` (`bool`): The current CharXiv dataset on HuggingFace contains some typographical errors in the targets that make certain samples impossible to score correctly. If `correct_targets` is `True`, these unwinnable targets will be appended with a corrected version and an indicator showing the grader model that either answer is acceptable. (default: `True`)
+- `apply_corrections` (`bool`): The current CharXiv dataset on HuggingFace contains some typographical errors in the targets that make certain samples impossible to score correctly. If `apply_corrections` is `True`, these unwinnable targets will be appended with a corrected version and an indicator showing the grader model that either answer is acceptable. (default: `True`)
 
 ## Dataset
 
@@ -118,6 +118,10 @@ Each sample contains a single question-answer pairing with multiple questions re
 
 The inspect implementation of CharXiv uses singleton sorting in the grading as well where the original batched the questions by grading instruction templates in order to conserve tokens. Singleton sorting was chosen to ensure grade determinism and independence at the expense of additional tokens.
 
+Due to the swap to singleton sorting in grading, the instructions provided to the grader model were reformatted to make more sense for the desired output.
+
+Some of the JSON keys used in the grading instruction examples were inconsistent with the originally specified output formatting and were therefore changed to avoid a possible instrument failure.
+
 Opted to fix a typographical error in the response instructions for reasoning response questions with answer-in-chart as it risked creating instrument failures: "exlicitly" -> "explicitly".
 
 Opted to fix a typographical error in the grading instructions as it risked creating instrument failures: "interger" -> "integer".
@@ -136,3 +140,15 @@ Grading instruction altered to accomodate the possibility of a multiple answer t
 '''
 
 ## Changelog
+
+### [2-A] - 2026-09-08
+
+- Fixed categories to no longer consider "physics" within the category "cs" due to substring matching.
+
+- Altered grading instructions to reference JSON keys consistent with the desired output in the examples provided to the grader model.
+
+- Fixed a bug where a target with a decimal place followed by a 0 would ask the model for an exact integer rather than a single decimal place.
+
+### [1-A] - 2026-09-04
+
+- Changed name of "apply_corrections" task parameter (previously was "correct_targets").
