@@ -973,6 +973,13 @@ MANUAL_GRADING_CORRECTED_TARGETS: dict[str, str] = {
     "2323.5": "North_Central",
     "42.5": "PD-DDPG, plain",
     "495.2": "Crude oil, Oil products, Natural gas, Cars and machinery, Ferrous metals, Diesel fuel, Liquid fuels, Coal, Wheat, Liquified natural gas, Alluminum",
+    "1159.5": "D_K",
+    "1212.5": "B, N-C",
+    "1312.5": "3",
+    "167.5": "INSTA-BNN+",
+    "1736.5": "light green curve",
+    "195.5": "CIFAR-10 IID/ATOMO",
+    "487.5": "20 and 30"
 }
 
 

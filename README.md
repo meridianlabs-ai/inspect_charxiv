@@ -112,6 +112,13 @@ Inspect charxiv uses LLM as a judge for grading. The model used for this can be 
 
 ## Evaluation Report
 
+| Model                    | Subset       | Samples | Epochs | Score          | Stderr | Time   |
+| ------------------------ | ------------ | ------- | ------ | -------------- | ------ | ------ |
+| anthropic/claude-fable-5 | Descriptive  | 4000    | 1      | 94.3% accuracy | 0.4    | 3m 29s |
+| anthropic/claude-fable-5 | Reasoning    | 1000    | 1      | 86.6% accuracy | 1.1    | 2m 23s |
+| openai/gpt-4o            | Descriptive  | 4000    | 1      | 79.5% accuracy | 0.6    | 1m 39s |
+| openai/gpt-4o            | Reasoning    | 1000    | 1      | 45.9% accuracy | 1.6    | 0m 32s |
+
 ### Implementation Deviations
 
 Each sample contains a single question-answer pairing with multiple questions referencing the same chart. This is a deviation from the original CharXiv experiment which used batched sorting by images. Singleton sorting was chosen to better leverage the tools available in the inspect framework.
@@ -150,6 +157,8 @@ Grading instruction altered to accomodate the possibility of a multiple answer t
 - Fixed a bug where a target with a decimal place followed by a 0 would ask the model for an exact integer rather than a single decimal place.
 
 - Fixed a bug where the image conversion was imposing an extra layer of lossy compression upon the images from the Huggingface Dataset
+
+- Found additional false positive cases that were underscoring cheaper models and added them to apply_corrections cases.
 
 ### [1-A] - 2026-09-04
 
