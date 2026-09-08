@@ -57,7 +57,8 @@ def convert_descriptive_question(
             "is_descriptive": True,
             "question_id": input_sample.get(f"descriptive_q{question_index}"),
             "field_of_study": input_sample.get("category"),
-            "target_corrected": qid in MANUAL_GRADING_CORRECTED_TARGETS,
+            "flagged_for_correction": qid in MANUAL_GRADING_CORRECTED_TARGETS,
+            "correction_applied": apply_corrections and qid in MANUAL_GRADING_CORRECTED_TARGETS,
         },
     )
 
@@ -99,7 +100,8 @@ def convert_reasoning_question(
             "question_id": input_sample.get("reasoning_a_type"),
             "question_text": input_sample.get("reasoning_q"),
             "field_of_study": input_sample.get("category"),
-            "target_corrected": qid in MANUAL_GRADING_CORRECTED_TARGETS,
+            "flagged_for_correction": qid in MANUAL_GRADING_CORRECTED_TARGETS,
+            "correction_applied": apply_corrections and qid in MANUAL_GRADING_CORRECTED_TARGETS,
         },
     )
 
