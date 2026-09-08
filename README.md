@@ -118,6 +118,10 @@ Each sample contains a single question-answer pairing with multiple questions re
 
 The inspect implementation of CharXiv uses singleton sorting in the grading as well where the original batched the questions by grading instruction templates in order to conserve tokens. Singleton sorting was chosen to ensure grade determinism and independence at the expense of additional tokens.
 
+Due to the swap to singleton sorting in grading, the instructions provided to the grader model were reformatted to make more sense for the desired output.
+
+Some of the JSON keys used in the grading instruction examples were inconsistent with the originally specified output formatting and were therefore changed to avoid a possible instrument failure.
+
 Opted to fix a typographical error in the response instructions for reasoning response questions with answer-in-chart as it risked creating instrument failures: "exlicitly" -> "explicitly".
 
 Opted to fix a typographical error in the grading instructions as it risked creating instrument failures: "interger" -> "integer".
@@ -140,6 +144,8 @@ Grading instruction altered to accomodate the possibility of a multiple answer t
 ### [2-A] - 2026-09-08
 
 - Fixed categories to no longer consider "physics" within the category "cs" due to substring matching.
+
+- Altered grading instructions to reference JSON keys consistent with the desired output in the examples provided to the grader model.
 
 ### [1-A] - 2026-09-04
 

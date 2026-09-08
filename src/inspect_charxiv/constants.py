@@ -1,6 +1,6 @@
 import os
-
 from pathlib import Path
+
 from platformdirs import user_cache_dir
 
 DESCRIPTIVE_RESP_INST = {
@@ -96,21 +96,25 @@ Rubric:
     Response 1: The title of the plot is "The number of students in each grade".
     Ground Truth 1: The variance of students in each grade
 
+    {
+        "extract_answer": "The number of students in each grade",
+        "score": 0
+    }
     T2:
     Response 2: There is no title.
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": "Not Applicable",
+        "score": 1
+    }
     T3:
     Response 3: A_v^t
     Ground Truth 3: A^t_v
 
     {
-        "extract_answer_T1": "The number of students in each grade",
-        "score_T1": 0
-        "extract_answer_T2: "Not Applicable",
-        "score_T2": 1
-        "extract_answer_T3": "A_v^t",
-        "score_T3": 1
+        "extract_answer": "A_v^t",
+        "score": 1
     }
     ### Example End ###
 
@@ -131,21 +135,24 @@ Rubric:
     Response 1: The answer is 1.0
     Ground Truth 1: 1.00
 
+    {
+        "extract_answer": 1.0,
+        "score": 1
+    }
     T2:
     Response 2: By manually inspecting the plot, the final answer should be 0.
     Ground Truth 2: Not Applicable
-
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: A_v^t
     Ground Truth 3: A^t_v
 
     {
-        "extract_answer_T1": 1.0,
-        "score_T1": 1
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": "A_v^t",
-        "score_T3": 1
+        "extract_answer": "A_v^t",
+        "score": 1
     }
     ### Example End ###
 
@@ -166,21 +173,25 @@ Rubric:
     Response 1: The answer is 1.0
     Ground Truth 1: 1.00
 
+    {
+        "extract_answer": 1.0,
+        "score": 1
+    }
     T2:
     Response 2: By manually inspecting the plot, the final answer should be 0.
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: A_v^t
     Ground Truth 3: A^t_v
 
     {
-        "extract_answer_T1": 1.0,
-        "score_T1": 1
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": "A_v^t",
-        "score_T3": 1
+        "extract_answer": "A_v^t",
+        "score": 1
     }
     ### Example End ###
 
@@ -201,21 +212,25 @@ Rubric:
     Response 1: The answer is 1.0
     Ground Truth 1: 1.00
 
+    {
+        "extract_answer": 1.0,
+        "score": 1
+    }
     T2:
     Response 2: By manually inspecting the plot, the final answer should be 0.
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: A_v^t
     Ground Truth 3: A^t_v
 
     {
-        "extract_answer_T1": 1.0,
-        "score_T1": 1
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": "A_v^t",
-        "score_T3": 1
+        "extract_answer": "A_v^t",
+        "score": 1
     }
     ### Example End ###
 
@@ -236,21 +251,25 @@ Rubric:
     Response 1: The answer is 1.0
     Ground Truth 1: 1.00
 
+    {
+        "extract_answer": 1.0,
+        "score": 1
+    }
     T2:
     Response 2: By manually inspecting the plot, the final answer should be 0.
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: A_v^t
     Ground Truth 3: A^t_v
 
     {
-        "extract_answer_T1": 1.0,
-        "score_T1": 1
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": "A_v^t",
-        "score_T3": 1
+        "extract_answer": "A_v^t",
+        "score": 1
     }
     ### Example End ###
 
@@ -271,21 +290,25 @@ Rubric:
     Response 1: The answer is 1.0
     Ground Truth 1: 1.00
 
+    {
+        "extract_answer": 1.0,
+        "score": 1
+    }
     T2:
     Response 2: By manually inspecting the plot, the final answer should be 0.
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: A_v^t
     Ground Truth 3: A^t_v
 
     {
-        "extract_answer_T1": 1.0,
-        "score_T1": 1
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": "A_v^t",
-        "score_T3": 1
+        "extract_answer": "A_v^t",
+        "score": 1
     }
     ### Example End ###
 
@@ -306,21 +329,25 @@ Rubric:
     Response 1: The answer is 1.0
     Ground Truth 1: 1.00
 
+    {
+        "extract_answer": 1.0,
+        "score": 1
+    }
     T2:
     Response 2: By manually inspecting the plot, the final answer should be 0.
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: A_v^t
     Ground Truth 3: A^t_v
 
     {
-        "extract_answer_T1": 1.0,
-        "score_T1": 1
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": "A_v^t",
-        "score_T3": 1
+        "extract_answer": "A_v^t",
+        "score": 1
     }
     ### Example End ###
 
@@ -341,21 +368,25 @@ Rubric:
     Response 1: 5
     Ground Truth 1: 6
 
+    {
+        "extract_answer": 5,
+        "score": 0
+    }
     T2:
     Response 2: 0
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: 4
     Ground Truth 3: 4
 
     {
-        "extract_answer_T1": 5,
-        "score_T1": 0
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": 4,
-        "score_T3": 1
+        "extract_answer": 4,
+        "score": 1
     }
     ### Example End ###
 
@@ -376,21 +407,25 @@ Rubric:
     Response 1: 5
     Ground Truth 1: 6
 
+    {
+        "extract_answer": 5,
+        "score": 0
+    }
     T2:
     Response 2: 0
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: 4
     Ground Truth 3: 4
 
     {
-        "extract_answer_T1": 5,
-        "score_T1": 0
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": 4,
-        "score_T3": 1
+        "extract_answer": 4,
+        "score": 1
     }
     ### Example End ###
 
@@ -411,21 +446,25 @@ Rubric:
     Response 1: 5
     Ground Truth 1: 6
 
+    {
+        "extract_answer": 5,
+        "score": 0
+    }
     T2:
     Response 2: 0
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: 4
     Ground Truth 3: 4
 
     {
-        "extract_answer_T1": 5,
-        "score_T1": 0
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": 4,
-        "score_T3": 1
+        "extract_answer": 4,
+        "score": 1
     }
     ### Example End ###
 
@@ -446,21 +485,25 @@ Rubric:
     Response 1: No, there are no intersections.
     Ground Truth 1: no
 
+    {
+        "extract_answer": "No",
+        "score": 1
+    }
     T2:
     Response 2: No, all the lines are parallel.
     Ground Truth 2: Yes
 
+    {
+        "extract_answer": "No",
+        "score": 0
+    }
     T3:
     Response 3: There are no lines in the plot.
     Ground Truth 3: Not Applicable
 
     {
-        "extract_answer_T1": "No",
-        "score_T1": 1
-        "extract_answer_T2: "No",
-        "score_T2": 0
-        "extract_answer_T3": "Not Applicable",
-        "score_T3": 1
+        "extract_answer": "Not Applicable",
+        "score": 1
     }
     ### Example End ###
 
@@ -481,21 +524,25 @@ Rubric:
     Response 1: 5
     Ground Truth 1: 6
 
+    {
+        "extract_answer": 5,
+        "score": 0
+    }
     T2:
     Response 2: 0
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: 4
     Ground Truth 3: 4
 
     {
-        "extract_answer_T1": 5,
-        "score_T1": 0
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": 4,
-        "score_T3": 1
+        "extract_answer": 4,
+        "score": 1
     }
     ### Example End ###
 
@@ -516,21 +563,25 @@ Rubric:
     Response 1: Here are the names of the labels: A, B, C
     Ground Truth 1: B, A, C
 
+    {
+        "extract_answer": "A, B, C",
+        "score": 0
+    }
     T2:
     Response 2: The labels are T56, B33.
     Ground Truth 2: T56,B33,A12
 
+    {
+        "extract_answer": "T56, B33",
+        "score": 0
+    }
     T3:
     Response 3: \\alpha, \\beta, \\gamma^t_v
     Ground Truth 3: α, β, γ_v^t
 
     {
-        "extract_answer_T1": "A, B, C",
-        "score_T1": 0
-        "extract_answer_T2: "T56, B33",
-        "score_T2": 0
-        "extract_answer_T3": "\\alpha, \\beta, \\gamma^t_v",
-        "score_T3": 1
+        "extract_answer": "\\alpha, \\beta, \\gamma^t_v",
+        "score": 1
     }
     ### Example End ###
 
@@ -551,21 +602,25 @@ Rubric:
     Response 1: 5
     Ground Truth 1: 6
 
+    {
+        "extract_answer": 5,
+        "score": 0
+    }
     T2:
     Response 2: 0
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: 4
     Ground Truth 3: 4
 
     {
-        "extract_answer_T1": 5,
-        "score_T1": 0
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": 4,
-        "score_T3": 1
+        "extract_answer": 4,
+        "score": 1
     }
     ### Example End ###
 
@@ -585,22 +640,25 @@ Rubric:
     T1:
     Response 1: 5
     Ground Truth 1: 6
-
+    {
+        "extract_answer": 5,
+        "score": 0
+    }
     T2:
     Response 2: 0
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: 4
     Ground Truth 3: 4
 
     {
-        "extract_answer_T1": 5,
-        "score_T1": 0
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": 4,
-        "score_T3": 1
+        "extract_answer": 4,
+        "score": 1
     }
     ### Example End ###
 
@@ -620,21 +678,25 @@ Rubric:
     Response 1: there is an increase in the data from left to right
     Ground Truth 1: Decreases
 
+    {
+        "extract_answer": "Increases",
+        "score": 0
+    }
     T2:
     Response 2: the curves move up and stay constant
     Ground Truth 2: Increases then stabilizes
 
+    {
+        "extract_answer": "Move up and stay constant",
+        "score": 1
+    }
     T3:
     Response 3: Decreases
     Ground Truth 3: Decreases then increases
 
     {
-        "extract_answer_T1": "Increases",
-        "score_T1": 0
-        "extract_answer_T2: "Move up and stay constant",
-        "score_T2": 1
-        "extract_answer_T3": "Decreases",
-        "score_T3": 0
+        "extract_answer": "Decreases",
+        "score": 0
     }
     ### Example End ###
 
@@ -655,21 +717,25 @@ Rubric:
     Response 1: 5
     Ground Truth 1: 6
 
+    {
+        "extract_answer": 5,
+        "score": 0
+    }
     T2:
     Response 2: 0
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: 4
     Ground Truth 3: 4
 
     {
-        "extract_answer_T1": 5,
-        "score_T1": 0
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": 4,
-        "score_T3": 1
+        "extract_answer": 4,
+        "score": 1
     }
     ### Example End ###
 
@@ -689,21 +755,25 @@ Rubric:
     Response 1: 2 by 3
     Ground Truth 1: 3 by 2
 
+    {
+        "extract_answer": "2 by 3",
+        "score": 0
+    }
     T2:
     Response 2: the layout is 1 by 1
     Ground Truth 2: 1 by 1
 
+    {
+        "extract_answer": "1 by 1",
+        "score": 1
+    }
     T3:
     Response 3: there are two rows and three columns
     Ground Truth 3: 2 by 3
 
     {
-        "extract_answer_T1": "2 by 3",
-        "score_T1": 0
-        "extract_answer_T2: "1 by 1",
-        "score_T2": 1
-        "extract_answer_T3": "2 by 3",
-        "score_T3": 1
+        "extract_answer": "2 by 3",
+        "score": 1
     }
     ### Example End ###
 
@@ -724,21 +794,25 @@ Rubric:
     Response 1: 5
     Ground Truth 1: 6
 
+    {
+        "extract_answer": 5,
+        "score": 0
+    }
     T2:
     Response 2: 0
     Ground Truth 2: Not Applicable
 
+    {
+        "extract_answer": 0,
+        "score": 0
+    }
     T3:
     Response 3: 4
     Ground Truth 3: 4
 
     {
-        "extract_answer_T1": 5,
-        "score_T1": 0
-        "extract_answer_T2: 0,
-        "score_T2": 0
-        "extract_answer_T3": 4,
-        "score_T3": 1
+        "extract_answer": 4,
+        "score": 1
     }
     ### Example End ###
 
@@ -762,7 +836,7 @@ REASONING_GRADING_INST = {
     * Response: There is only one curve that intersects y=\\lambda exactly three times. The name of the curve is written as P55762.
 
     {
-        "extracted_answer": "P55762",
+        "extract_answer": "P55762",
         "score": 0
     }
     ### Example 1 Ends ###
@@ -774,7 +848,7 @@ REASONING_GRADING_INST = {
     * Response: The letter of the subplot where all bars are above 35 is b.
 
     {
-        "extracted_answer": "b",
+        "extract_answer": "b",
         "score": 1
     }
     ### Example 2 Ends ###
@@ -800,7 +874,7 @@ REASONING_GRADING_INST = {
     * Response: The red curve is increasing between t=10 and t=25.
 
     {
-        "extracted_answer": "increasing",
+        "extract_answer": "increasing",
         "score": 0
     }
     ### Example 1 Ends ###
@@ -811,7 +885,7 @@ REASONING_GRADING_INST = {
     * Response: The interval where the blue curve achieves the maximum value is [50, 100].
 
     {
-        "extracted_answer": "[50, 100]",
+        "extract_answer": "[50, 100]",
         "score": 1
     }
     ### Example 2 Ends ###
@@ -833,7 +907,7 @@ REASONING_GRADING_INST = {
     * Response: The value of the red curve at t=10 is 0.012.
 
     {
-        "extracted_answer": "0.012",
+        "extract_answer": "0.012",
         "score": 0
     }
     ### Example 1 Ends ###
@@ -844,7 +918,7 @@ REASONING_GRADING_INST = {
     * Response: The value of the blue curve at t=50 is 1.5e3.
 
     {
-        "extracted_answer": "1.5e3",
+        "extract_answer": "1.5e3",
         "score": 1
     }
     ### Example 2 Ends ###
@@ -866,7 +940,7 @@ REASONING_GRADING_INST = {
     * Response: The value of the red curve at t=10 is 0.012.
 
     {
-        "extracted_answer": "0.012",
+        "extract_answer": "0.012",
         "score": 0
     }
     ### Example 1 Ends ###
@@ -877,7 +951,7 @@ REASONING_GRADING_INST = {
     * Response: The value of the blue curve at t=50 is 1.5e3.
 
     {
-        "extracted_answer": "1.5e3",
+        "extract_answer": "1.5e3",
         "score": 1
     }
     ### Example 2 Ends ###
