@@ -126,6 +126,7 @@ def convert_to_subplot_pos(
     return result
 
 
+# converts image_bytes to a file path if the image is found in the cache, otherwise saves the image to the cache and returns the file path. Allows the images to be reused without downloading or keeping the images in the repository which would introduce liscencing issues.
 def convert_image(input_sample: dict[str, str | int | None]) -> str:
     IMAGE_BASE_DIR = INSPECT_EVALS_CACHE_PATH / "charxiv_images"
     image = Path(IMAGE_BASE_DIR / input_sample["figure_path"])

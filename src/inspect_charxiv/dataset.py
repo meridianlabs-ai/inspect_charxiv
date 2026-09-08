@@ -40,67 +40,14 @@ def _make_record_to_sample(
     subset: Literal["descriptive", "reasoning"] | None = None,
     apply_corrections: bool = True,
 ) -> RecordToSample:
-    """Return a sample_fields callable that converts a record to a list of Samples derived from the descriptive questions, reasoning questions, or both depending on the value of type. If type is None, return both descriptive and reasoning questions. If type is "descriptive", return only descriptive questions. If type is "reasoning", return only reasoning questions."""
+    """Return a sample_fields callable that converts a record to a list of Samples derived from the descriptive questions, reasoning questions, or both depending on the value of subset. If subset is None, return both descriptive and reasoning questions. If subset is "descriptive", return only descriptive questions. If subset is "reasoning", return only reasoning questions."""
 
     def record_to_sample(record: dict[str, str | int | None]) -> Sample | list[Sample]:
-        if subset is None:
-            return [
-                convert_descriptive_question(
-                    question_index=1,
-                    input_sample=record,
-                    apply_corrections=apply_corrections,
-                ),
-                convert_descriptive_question(
-                    question_index=2,
-                    input_sample=record,
-                    apply_corrections=apply_corrections,
-                ),
-                convert_descriptive_question(
-                    question_index=3,
-                    input_sample=record,
-                    apply_corrections=apply_corrections,
-                ),
-                convert_descriptive_question(
-                    question_index=4,
-                    input_sample=record,
-                    apply_corrections=apply_corrections,
-                ),
-                convert_reasoning_question(
-                    input_sample=record, apply_corrections=apply_corrections
-                ),
-            ]
-        elif subset == "descriptive":
-            return [
-                convert_descriptive_question(
-                    question_index=1,
-                    input_sample=record,
-                    apply_corrections=apply_corrections,
-                ),
-                convert_descriptive_question(
-                    question_index=2,
-                    input_sample=record,
-                    apply_corrections=apply_corrections,
-                ),
-                convert_descriptive_question(
-                    question_index=3,
-                    input_sample=record,
-                    apply_corrections=apply_corrections,
-                ),
-                convert_descriptive_question(
-                    question_index=4,
-                    input_sample=record,
-                    apply_corrections=apply_corrections,
-                ),
-            ]
-        elif subset == "reasoning":
-            return [
-                convert_reasoning_question(
-                    input_sample=record, apply_corrections=apply_corrections
-                )
-            ]
-        else:
-            raise ValueError(
-                f"Invalid subset value. Must be 'descriptive', or 'reasoning'. Received: {subset}"
-            )
+        samples: list[Sample] = []
+        if subset in (None, "descriptive"):
+            samples += [convert_descriptive_question(i, record, apply_corrections) for i in range(1, 5)]
+        if subset in (None, "reasoning"):
+            samples.append(convert_reasoning_question(record, apply_corrections))
+        return samples
 
     return record_to_sample
