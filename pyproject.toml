@@ -137,7 +137,6 @@ dependencies = [
     "inspect_ai>=0.3.158",
     "mypy>=2.3.0",
     "openai>=2.53.0",
-    "pillow>=12.3.0",
     "pyyaml>=5.1.0",
     # USER: Add your eval's dependencies here
 ]

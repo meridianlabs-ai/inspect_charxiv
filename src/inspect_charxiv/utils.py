@@ -1,11 +1,9 @@
 import logging
-from io import BytesIO
 from pathlib import Path
 from typing import Any
 
 from inspect_ai.dataset import Sample
 from inspect_ai.model import ChatMessage, ChatMessageUser, ContentImage, ContentText
-from PIL import Image
 
 from inspect_charxiv.constants import (
     DESCRIPTIVE_RESP_INST,
@@ -15,6 +13,7 @@ from inspect_charxiv.constants import (
 )
 
 NUMBER_IN_GENERAL_QUESTION: int = 4
+IMAGE_BASE_DIR = INSPECT_EVALS_CACHE_PATH / "charxiv_images"
 
 logger = logging.getLogger(__name__)
 
@@ -130,18 +129,24 @@ def convert_to_subplot_pos(
     return result
 
 
-# converts image_bytes to a file path if the image is found in the cache, otherwise saves the image to the cache and returns the file path. Allows the images to be reused without downloading or keeping the images in the repository which would introduce liscencing issues.
 def convert_image(input_sample: dict[str, Any]) -> str:
-    IMAGE_BASE_DIR = INSPECT_EVALS_CACHE_PATH / "charxiv_images"
-    image = Path(IMAGE_BASE_DIR / input_sample["figure_path"])
-    image_bytes = input_sample["image"]["bytes"]
+    """Cache the chart's original JPEG bytes to disk and return the path.
 
+    input_sample["image"]["bytes"] is the complete original .jpg file as stored
+    on Hugging Face, already compressed once by the CharXiv authors. Writing it
+    verbatim preserves that single compression; decoding and re-saving would add
+    a second lossy pass that blurs the tick labels and axis text the questions
+    ask about. Caching by figure_path lets the 5 questions per chart reuse one
+    file, and keeps the images out of the repository (avoiding licensing issues).
+    """
+    image = IMAGE_BASE_DIR / input_sample["figure_path"]
     if not image.exists():
-        logger.debug(f"Extracting {image.name}")
         image.parent.mkdir(exist_ok=True, parents=True)
-        img = Image.open(BytesIO(image_bytes))
-        img.save(image, format="JPEG")
-
+        # Write to a temp path and atomically rename so an interrupted write
+        # can't leave a truncated file that exists() then trusts forever.
+        tmp = image.with_suffix(image.suffix + ".tmp")
+        tmp.write_bytes(input_sample["image"]["bytes"])
+        tmp.replace(image)
     return str(image)
 
 
