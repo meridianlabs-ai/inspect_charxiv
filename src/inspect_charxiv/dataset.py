@@ -28,10 +28,10 @@ def load_charxiv_dataset(
         revision="f441eb632fc62f6f777830a0f47619e6e86459b0",  # The latest commit to the CharXiv repo as of Aug 11, 2026.
     )
     if category is not None:
-        categories: set[FieldOfStudy] = {category} if isinstance(category, str) else set(category)
-        dataset = dataset.filter(
-            lambda sample: sample.metadata.get("field_of_study") in categories
+        categories: set[FieldOfStudy] = (
+            {category} if isinstance(category, str) else set(category)
         )
+        dataset = dataset.filter(lambda sample: _in_categories(sample, categories))
     return dataset
 
 
@@ -45,9 +45,18 @@ def _make_record_to_sample(
     def record_to_sample(record: dict[str, str | int | None]) -> Sample | list[Sample]:
         samples: list[Sample] = []
         if subset in (None, "descriptive"):
-            samples += [convert_descriptive_question(i, record, apply_corrections) for i in range(1, 5)]
+            samples += [
+                convert_descriptive_question(i, record, apply_corrections)
+                for i in range(1, 5)
+            ]
         if subset in (None, "reasoning"):
             samples.append(convert_reasoning_question(record, apply_corrections))
         return samples
 
     return record_to_sample
+
+
+# helper function to be passed into categories filter when loading the huggingface dataset
+def _in_categories(sample: Sample, categories: set[FieldOfStudy]) -> bool:
+    field = (sample.metadata or {}).get("field_of_study")
+    return isinstance(field, str) and field in categories

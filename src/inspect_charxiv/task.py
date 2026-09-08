@@ -3,6 +3,7 @@ from typing import Literal
 
 from inspect_ai import Task, task
 from inspect_ai.model import get_model
+from inspect_ai.model._model_output import ModelOutput
 from inspect_ai.scorer import (
     CORRECT,
     INCORRECT,
@@ -45,7 +46,7 @@ def charxiv_scorer() -> Scorer:
         # eval() from Python (not just --model-role on the CLI) are honoured.
         grader_model = get_model(role="grader", default="openai/gpt-4o")
         answer = state.output.message.text
-        result: str
+        result: str | ModelOutput
         if state.metadata["is_descriptive"]:
             result = GRADING_PREFIX + (
                 DESCRIPTIVE_GRADING_QMAP[state.metadata["question_id"]]

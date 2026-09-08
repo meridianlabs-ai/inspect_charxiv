@@ -3,7 +3,7 @@ from pathlib import Path
 
 from platformdirs import user_cache_dir
 
-DESCRIPTIVE_RESP_INST = {
+DESCRIPTIVE_RESP_INST: dict[int | str | None, str] = {
     1: """what is its title?
     * Your final answer should be the most relevant title of the plot that is explicitly written.
     * If the plot does not have an explicit title or contains only a letter, answer 'Not Applicable'.
@@ -59,7 +59,7 @@ DESCRIPTIVE_RESP_INST = {
     * If the plot does not contain subplots, answer "1".""",
 }
 
-REASONING_RESP_INST = {
+REASONING_RESP_INST: dict[int | str | None, str] = {
     1: """{}
     * Your final answer must be grounded to some text that is explicitly written and relevant to the question in the chart.
     * If you need to answer multiple terms, separate them with commas.
@@ -79,12 +79,12 @@ REASONING_RESP_INST = {
     """,
 }
 
-GRADING_PREFIX = """
+GRADING_PREFIX: str = """
 You will be given a question, an ground truth answer and a model response. You need to extract the final answer from the model response, compare it with the ground truth answer, and then assign a binary score. Avoid providing explanations in your response. If there is no provided model response, please leave the extracted answer empty and give a score of 0. If the ground truth contains -OR- it means that there are multiple correct answers. In this case, if the extracted answer matches any of the correct answers, it should be scored as 1. If the extracted answer does not match any of the correct answers, it should be scored as 0.
 
 Your response must follow json formats with keys [extract_answer, score] where the value of the score is an integer in [0, 1]. You must follow the scoring rules:\n"""
 
-DESCRIPTIVE_GRADING_QMAP = {
+DESCRIPTIVE_GRADING_QMAP: dict[int | str | None, str] = {
     1: """
 Rubric:
     * Give a score of 1 if and only if the extracted answer and the ground truth answer are referring to the same term. It's acceptable to have different grammar or form (e.g., α and alpha; $R^2_{t,h,v,m}$ and R^2_t,h,v,m). It's acceptable to omit letter prefixes (e.g., (a) Increment over time and Increment over time).
@@ -824,7 +824,7 @@ Rubric:
 """,
 }
 
-REASONING_GRADING_INST = {
+REASONING_GRADING_INST: dict[int | str | None, str] = {
     1: """
     ### Rules ###
     * Give a score of 1 if and only if the final answer and the ground truth answer are referring to the same term. It's acceptable to have different grammar or form (e.g., α and alpha; $R^2_{t,h,v,m}$ and R^2_t,h,v,m). It's also acceptable to have different orders of the terms when question asks for multiple terms.
@@ -964,7 +964,7 @@ REASONING_GRADING_INST = {
     """,
 }
 
-MANUAL_GRADING_CORRECTED_TARGETS = {
+MANUAL_GRADING_CORRECTED_TARGETS: dict[str, str] = {
     "1041.5": "Robust DLMPC (Loc. noise)",
     "1353.5": "P1, 20 au, high ζ",
     "1498.5": "-M₂Ω₂/|Π₁|",

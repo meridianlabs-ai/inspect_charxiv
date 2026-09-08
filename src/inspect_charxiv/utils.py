@@ -1,6 +1,7 @@
 import logging
 from io import BytesIO
 from pathlib import Path
+from typing import Any
 
 from inspect_ai.dataset import Sample
 from inspect_ai.model import ChatMessage, ChatMessageUser, ContentImage, ContentText
@@ -20,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 def convert_descriptive_question(
     question_index: int,
-    input_sample: dict[str, str | int | None],
+    input_sample: dict[str, Any],
     apply_corrections: bool = True,
 ) -> Sample:
     subplot_pos = convert_to_subplot_pos(
@@ -35,46 +36,47 @@ def convert_descriptive_question(
                 ContentText(
                     text=subplot_pos
                     + DESCRIPTIVE_RESP_INST[
-                        input_sample.get(f"descriptive_q{question_index}")
+                        input_sample[f"descriptive_q{question_index}"]
                     ]
                 ),
             ]
         )
     ]
     qid = (
-        input_sample.get("figure_path").removeprefix("images/").removesuffix(".jpg")
+        input_sample["figure_path"].removeprefix("images/").removesuffix(".jpg")
         + f".{question_index}"
     )
     return Sample(
         input=message,
         target=correct_target(
-            question_id=qid, target=input_sample.get(f"descriptive_a{question_index}")
+            question_id=qid, target=input_sample[f"descriptive_a{question_index}"]
         )
         if apply_corrections
-        else input_sample.get(f"descriptive_a{question_index}"),
+        else str(input_sample[f"descriptive_a{question_index}"]),
         id=qid,
         metadata={
             "is_descriptive": True,
-            "question_id": input_sample.get(f"descriptive_q{question_index}"),
-            "field_of_study": input_sample.get("category"),
+            "question_id": input_sample[f"descriptive_q{question_index}"],
+            "field_of_study": input_sample["category"],
             "flagged_for_correction": qid in MANUAL_GRADING_CORRECTED_TARGETS,
-            "correction_applied": apply_corrections and qid in MANUAL_GRADING_CORRECTED_TARGETS,
+            "correction_applied": apply_corrections
+            and qid in MANUAL_GRADING_CORRECTED_TARGETS,
         },
     )
 
 
 def convert_reasoning_question(
-    input_sample: dict[str, str | int | None], apply_corrections: bool = True
+    input_sample: dict[str, Any], apply_corrections: bool = True
 ) -> Sample:
     instructions: str
     if input_sample.get("reasoning_a_type") == NUMBER_IN_GENERAL_QUESTION:
-        instructions = REASONING_RESP_INST[input_sample.get("reasoning_a_type")].format(
-            input_sample.get("reasoning_q"),
-            number_in_general_question_instructions(input_sample.get("reasoning_a")),
+        instructions = REASONING_RESP_INST[input_sample["reasoning_a_type"]].format(
+            input_sample["reasoning_q"],
+            number_in_general_question_instructions(input_sample["reasoning_a"]),
         )
     else:
-        instructions = REASONING_RESP_INST[input_sample.get("reasoning_a_type")].format(
-            input_sample.get("reasoning_q")
+        instructions = REASONING_RESP_INST[input_sample["reasoning_a_type"]].format(
+            input_sample["reasoning_q"]
         )
 
     message: list[ChatMessage] = [
@@ -86,29 +88,31 @@ def convert_reasoning_question(
         )
     ]
     qid = (
-        input_sample.get("figure_path").removeprefix("images/").removesuffix(".jpg")
-        + ".5"
+        input_sample["figure_path"].removeprefix("images/").removesuffix(".jpg") + ".5"
     )
     return Sample(
         input=message,
-        target=correct_target(question_id=qid, target=input_sample.get("reasoning_a"))
+        target=correct_target(question_id=qid, target=input_sample["reasoning_a"])
         if apply_corrections
-        else input_sample.get("reasoning_a"),
+        else str(input_sample["reasoning_a"]),
         id=qid,
         metadata={
             "is_descriptive": False,
-            "question_id": input_sample.get("reasoning_a_type"),
-            "question_text": input_sample.get("reasoning_q"),
-            "field_of_study": input_sample.get("category"),
+            "question_id": input_sample["reasoning_a_type"],
+            "question_text": input_sample["reasoning_q"],
+            "field_of_study": input_sample["category"],
             "flagged_for_correction": qid in MANUAL_GRADING_CORRECTED_TARGETS,
-            "correction_applied": apply_corrections and qid in MANUAL_GRADING_CORRECTED_TARGETS,
+            "correction_applied": apply_corrections
+            and qid in MANUAL_GRADING_CORRECTED_TARGETS,
         },
     )
 
 
 # helper function that generates the appropriate prompt prefix explaining which subplot the model should be looking at
 def convert_to_subplot_pos(
-    subplot_row: int | None, subplot_col: int | None, subplot_loc: str | None
+    subplot_row: str | int | None,
+    subplot_col: str | int | None,
+    subplot_loc: str | None,
 ) -> str:
     result = ""
     if subplot_row == 0:
@@ -127,7 +131,7 @@ def convert_to_subplot_pos(
 
 
 # converts image_bytes to a file path if the image is found in the cache, otherwise saves the image to the cache and returns the file path. Allows the images to be reused without downloading or keeping the images in the repository which would introduce liscencing issues.
-def convert_image(input_sample: dict[str, str | int | None]) -> str:
+def convert_image(input_sample: dict[str, Any]) -> str:
     IMAGE_BASE_DIR = INSPECT_EVALS_CACHE_PATH / "charxiv_images"
     image = Path(IMAGE_BASE_DIR / input_sample["figure_path"])
     image_bytes = input_sample["image"]["bytes"]
@@ -141,16 +145,20 @@ def convert_image(input_sample: dict[str, str | int | None]) -> str:
     return str(image)
 
 
-def number_in_general_question_instructions(answer: str) -> str:
-    if (answer.find(".") == -1):
+def number_in_general_question_instructions(answer: str | int | None) -> str:
+    if answer is None:
+        return ""
+    elif str(answer).find(".") == -1:
         return "* Your final answer must be an exact integer."
     else:
-        decimal_places = len(answer.split(".")[1])
+        decimal_places = len(str(answer).split(".")[1])
         return f"* Your final answer must be a number with {decimal_places} decimal places."
 
 
-def correct_target(question_id: str, target: str) -> str:
+def correct_target(question_id: str, target: str | int | None) -> str:
+    if (target is None) or (target == ""):
+        raise ValueError("Target is None or empty")
     if question_id in MANUAL_GRADING_CORRECTED_TARGETS:
-        return target + " -OR- " + MANUAL_GRADING_CORRECTED_TARGETS[question_id]
+        return str(target) + " -OR- " + MANUAL_GRADING_CORRECTED_TARGETS[question_id]
     else:
-        return target
+        return str(target)
