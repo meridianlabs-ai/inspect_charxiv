@@ -22,7 +22,7 @@ uv sync
 
 ### Running evaluations
 
-Now you can start evaluating models. For simplicity's sake, this section assumes you are using Inspect CharXiv from the standalone repo. If that's not the case and you are not using `uv` to manage dependencies in your own project, you can use the same commands with `uv run` dropped.
+Now you can start evaluating models. If you are not using `uv` to manage dependencies in your own project, you can use the same commands with `uv run` dropped.
 
 ```bash
 uv run inspect eval inspect_charxiv/charxiv --model openai/gpt-5-nano
@@ -71,7 +71,7 @@ See `uv run inspect eval --help` for all available options.
 
 - `category` (`Literal["econ", "math", "physics", "q-bio", "cs", "eess", "q-fin", "stat"] | list[Literal["econ", "math", "physics", "q-bio", "cs", "eess", "q-fin", "stat"]] | None`): Which category or categories to include in the eval. Categories are based off the 8 fields of study for the data represented in the charts used for samples. If no categories are specified, run will include all categories. (default: `None`)
 
-- `correct_targets` (`bool`): The current CharXiv dataset on HuggingFace contains some typographical errors in the targets that make certain samples impossible to score correctly. If `correct_targets` is `True`, these unwinnable targets will be appended with a corrected version and an indicator showing the grader model that either answer is acceptable. (default: `True`)
+- `apply_corrections` (`bool`): The current CharXiv dataset on HuggingFace contains some typographical errors in the targets that make certain samples impossible to score correctly. If `apply_corrections` is `True`, these unwinnable targets will be appended with a corrected version and an indicator showing the grader model that either answer is acceptable. (default: `True`)
 
 ## Dataset
 
@@ -136,3 +136,11 @@ Grading instruction altered to accomodate the possibility of a multiple answer t
 '''
 
 ## Changelog
+
+### [2-A] - 2026-09-08
+
+- Fixed categories to no longer consider "physics" within the category "cs" due to substring matching.
+
+### [1-A] - 2026-09-04
+
+- Changed name of "apply_corrections" task parameter (previously was "correct_targets").
