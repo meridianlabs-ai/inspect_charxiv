@@ -118,6 +118,8 @@ Inspect charxiv uses LLM as a judge for grading. The model used for this can be 
 | anthropic/claude-fable-5 | Reasoning    | 1000    | 1      | 86.6% accuracy | 1.1    | 2m 23s |
 | openai/gpt-4o            | Descriptive  | 4000    | 1      | 79.5% accuracy | 0.6    | 1m 39s |
 | openai/gpt-4o            | Reasoning    | 1000    | 1      | 45.9% accuracy | 1.6    | 0m 32s |
+| openai/gpt-6-astra       | Descriptive  | 4000    | 1      | 96.2% accuracy | 0.3    | 1m 46s |
+| openai/gpt-6-astra       | Reasoning    | 1000    | 1      | 89.3% accuracy | 1.0    | 1m 08s |
 
 ### Implementation Deviations
 
@@ -147,6 +149,10 @@ Grading instruction altered to accomodate the possibility of a multiple answer t
 ```
 
 ## Changelog
+
+### [3-A] - 2026-09-11
+
+- Added GPT-6 Astra run results to evaluation report.
 
 ### [2-A] - 2026-09-08
 
