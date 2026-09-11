@@ -103,12 +103,12 @@ Here is an example from the dataset of a sample with a reasoning question:
 
 ### License and attribution
 
-"Code in this repository is MIT-licensed. Question/answer content from the CharXiv dataset — including the corrected targets in constants.py — is CC BY-SA 4.0, © Zirui Wang et al. Prompt templates and grading rubrics are adapted from the CharXiv repository under Apache-2.0. Chart images remain under the copyrights of the original arXiv paper authors and are fetched from the official Hugging Face distribution at runtime."
+Code in this repository is MIT-licensed. Question/answer content from the CharXiv dataset — including the corrected targets in constants.py — is CC BY-SA 4.0, © Zirui Wang et al. Prompt templates and grading rubrics are adapted from the CharXiv repository under Apache-2.0. Chart images remain under the copyrights of the original arXiv paper authors and are fetched from the official Hugging Face distribution at runtime.
 
 
 ## Scoring
 
-Inspect charxiv uses LLM as a judge for grading. The model used for this can be specified using `--model-role` `grader=`[model-provider]/[model-name]. The default model is "openai/gpt-4o". This grader model is asked to compare the sample's target to the model's response and given grading instructions to inform this comparison. If the grader model evaluates them as equivalent, the question is given a score of 'C' for correct. Otherwise, the question is given a score of 'I' for incorrect. The grading instructions given to the grader model depend on the question type. For descriptive questions, each of the 19 possible questions have grading instructions specific to what the sample's question was. For reasoning questions, there are 4 different instruction templates that will be employed based on a contingency matrix of whether the question is asking for a number or text, and whether or not the answer can be found in the chart or not.
+Inspect charxiv uses LLM as a judge for grading. The model used for this can be specified using `--model-role grader=[model-provider]/[model-name]`. The default model is `openai/gpt-4o`. This grader model is asked to compare the sample's target to the model's response and given grading instructions to inform this comparison. If the grader model evaluates them as equivalent, the question is given a score of 'C' for correct. Otherwise, the question is given a score of 'I' for incorrect. The grading instructions given to the grader model depend on the question type. For descriptive questions, each of the 19 possible questions have grading instructions specific to what the sample's question was. For reasoning questions, there are 4 different instruction templates that will be employed based on a contingency matrix of whether the question is asking for a number or text, and whether or not the answer can be found in the chart or not.
 
 ## Evaluation Report
 
@@ -121,11 +121,11 @@ Inspect charxiv uses LLM as a judge for grading. The model used for this can be 
 
 ### Implementation Deviations
 
-Each sample contains a single question-answer pairing with multiple questions referencing the same chart. This is a deviation from the original CharXiv experiment which used batched sorting by images. Singleton sorting was chosen to better leverage the tools available in the inspect framework.
+Each sample contains a single question-answer pairing with multiple questions referencing the same chart. This is a deviation from the original CharXiv experiment which used batched question prompting by images. Singleton question prompting was chosen to better leverage the tools available in the inspect framework.
 
-The inspect implementation of CharXiv uses singleton sorting in the grading as well where the original batched the questions by grading instruction templates in order to conserve tokens. Singleton sorting was chosen to ensure grade determinism and independence at the expense of additional tokens.
+The inspect implementation of CharXiv uses singleton prompting in the grading as well where the original batched the samples by grading instruction templates in order to conserve tokens. Singleton prompting was chosen to ensure grade determinism and independence at the expense of additional tokens.
 
-Due to the swap to singleton sorting in grading, the instructions provided to the grader model were reformatted to make more sense for the desired output.
+Due to the swap to singleton prompting in grading, the instructions provided to the grader model were reformatted to make more sense for the desired output.
 
 Some of the JSON keys used in the grading instruction examples were inconsistent with the originally specified output formatting and were therefore changed to avoid a possible instrument failure.
 
@@ -137,14 +137,14 @@ Grading instruction altered to accomodate the possibility of a multiple answer t
 
 ## Citation
 
-'''bibtex
+```bibtex
 @article{wang2024charxiv,
   title={CharXiv: Charting Gaps in Realistic Chart Understanding in Multimodal LLMs},
   author={Wang, Zirui and Xia, Mengzhou and He, Luxi and Chen, Howard and Liu, Yitao and Zhu, Richard and Liang, Kaiqu and Wu, Xindi and Liu, Haotian and Malladi, Sadhika and Chevalier, Alexis and Arora, Sanjeev and Chen, Danqi},
   journal={arXiv preprint arXiv:2406.18521},
   year={2024}
 }
-'''
+```
 
 ## Changelog
 
@@ -158,8 +158,18 @@ Grading instruction altered to accomodate the possibility of a multiple answer t
 
 - Fixed a bug where the image conversion was imposing an extra layer of lossy compression upon the images from the Huggingface Dataset
 
-- Found additional false positive cases that were underscoring cheaper models and added them to apply_corrections cases.
+- Found additional false negative cases that were underscoring cheaper models and added them to apply_corrections cases.
 
 ### [1-A] - 2026-09-04
 
 - Changed name of "apply_corrections" task parameter (previously was "correct_targets").
+
+### [0.1.0] - 2026-09-02
+
+- Initial implementation of the CharXiv eval.
+
+- correct_targets task parameter for fixing unwinnable samples.
+
+- subset task parameter for isolating "descriptive" or "reasoning" questions.
+
+- category task parameter for selecting which fields of study to include from the dataset.
