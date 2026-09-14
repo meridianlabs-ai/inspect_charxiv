@@ -979,7 +979,7 @@ MANUAL_GRADING_CORRECTED_TARGETS: dict[str, str] = {
     "167.5": "INSTA-BNN+",
     "1736.5": "light green curve",
     "195.5": "CIFAR-10 IID/ATOMO",
-    "487.5": "20 and 30"
+    "487.5": "20 and 30",
 }
 
 

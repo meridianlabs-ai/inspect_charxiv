@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 from typing import Any
 
 from inspect_ai.dataset import Sample

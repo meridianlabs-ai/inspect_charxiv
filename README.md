@@ -75,30 +75,20 @@ See `uv run inspect eval --help` for all available options.
 
 ## Dataset
 
-There are two types of questions in CharXiv: descriptive and reasoning. If no subset is specified, the eval will run using both types of questions.
-
-Here is an example from the dataset of a sample with a descriptive question:
+### Example (Descriptive Question)
 
 ```text
-**Question:** For the current plot, what is the total number of explicitly labeled ticks across all axes?
+**Problem:** For the current plot, what is the total number of explicitly labeled ticks across all axes?
 
-**Image:**
-
-![Image for example question](example.png)
-
-**Target:** "14"
+**Reference Answer:** 14
 ```
 
-Here is an example from the dataset of a sample with a reasoning question:
+### Example (Reasoning Question)
 
 ```text
-**Question:** Based on plot (a), should we say that the spin dimer correlations depend on r linearly, logarithmically, or exponentially?
+**Problem:** Based on plot (a), should we say that the spin dimer correlations depend on r linearly, logarithmically, or exponentially?
 
-**Image:**
-
-![Image for example question](example.png)
-
-**Target:** "exponentially"
+**Reference Answer:** exponentially
 ```
 
 ### License and attribution
