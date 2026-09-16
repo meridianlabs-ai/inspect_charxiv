@@ -78,7 +78,8 @@ See `uv run inspect eval --help` for all available options.
 ### Example (Descriptive Question)
 
 ```text
-**Problem:** For the current plot, what is the total number of explicitly labeled ticks across all axes?
+**Problem:** For the current plot, what is the total number of explicitly labeled ticks across all
+axes?
 
 **Reference Answer:** 14
 ```
@@ -86,7 +87,8 @@ See `uv run inspect eval --help` for all available options.
 ### Example (Reasoning Question)
 
 ```text
-**Problem:** Based on plot (a), should we say that the spin dimer correlations depend on r linearly, logarithmically, or exponentially?
+**Problem:** Based on plot (a), should we say that the spin dimer correlations depend on r linearly,
+logarithmically, or exponentially?
 
 **Reference Answer:** exponentially
 ```
