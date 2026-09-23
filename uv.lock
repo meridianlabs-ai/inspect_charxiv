@@ -1009,8 +1009,8 @@ dependencies = [
     { name = "anthropic" },
     { name = "datasets" },
     { name = "inspect-ai" },
-    { name = "mypy" },
     { name = "openai" },
+    { name = "platformdirs" },
     { name = "pyyaml" },
 ]
 
@@ -1034,8 +1034,8 @@ requires-dist = [
     { name = "anthropic", specifier = ">=0.121.0" },
     { name = "datasets", specifier = ">=5.0.1" },
     { name = "inspect-ai", specifier = ">=0.3.158" },
-    { name = "mypy", specifier = ">=2.3.0" },
     { name = "openai", specifier = ">=2.53.0" },
+    { name = "platformdirs", specifier = ">=3.0.0" },
     { name = "pyyaml", specifier = ">=5.1.0" },
 ]
 
