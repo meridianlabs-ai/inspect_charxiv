@@ -157,7 +157,7 @@ dependencies = [
 [project.entry-points.inspect_ai]
 inspect_charxiv = "inspect_charxiv"
 
-[dependency-groups]
+[project.optional-dependencies]
 dev = [
     "inspect-scout>=0.3.0",  # llm_scanner API used by agent_artefacts/trajectory_analysis/inspect_scout/
     "mypy",
@@ -172,10 +172,25 @@ dev = [
     "types-PyYAML",
 ]
 
+[dependency-groups]
+# Keeps a plain `uv sync` or `uv run` (the Makefile) installing the dev tools.
+dev = ["inspect_charxiv[dev]"]
+
 [tool.check-wheel-contents]
 ignore = ["W005", "W009"]
 
 [tool.uv]
-environments = [
-    "python_version >= '3.11'",
-]
+# 0.11.8 is the first uv that keeps uv.lock stable with a relative exclude-newer,
+# and 0.13.4 the first that no longer trusts the compromised emSign root
+# (GHSA-hq85-5cpj-mr62).
+required-version = ">=0.13.4"
+# Only resolve releases at least 7 days old (see README.md).
+exclude-newer = "7 days"
+
+# 6 hours only for direct dependencies that are a model provider SDK or an
+# Inspect package; see README.md.
+[tool.uv.exclude-newer-package]
+anthropic = "6 hours"
+inspect-ai = "6 hours"
+inspect-scout = "6 hours"
+openai = "6 hours"

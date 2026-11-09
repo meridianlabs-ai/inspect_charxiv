@@ -1,5 +1,5 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.11"
 resolution-markers = [
     "python_full_version >= '3.15' and sys_platform == 'win32'",
@@ -9,10 +9,10 @@ resolution-markers = [
     "python_full_version == '3.14.*' and sys_platform == 'emscripten'",
     "python_full_version == '3.14.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and sys_platform == 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
     "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32'",
+    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
     "python_full_version == '3.12.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
     "python_full_version < '3.12' and sys_platform == 'win32'",
     "python_full_version < '3.12' and sys_platform == 'emscripten'",
@@ -20,6 +20,16 @@ resolution-markers = [
 ]
 supported-markers = [
 ]
+
+[options]
+exclude-newer = "0001-01-01T00:00:00Z" # This has no effect and is included for backwards compatibility when using relative exclude-newer values.
+exclude-newer-span = "P7D"
+
+[options.exclude-newer-package]
+anthropic = { timestamp = "0001-01-01T00:00:00Z", span = "PT6H" }
+inspect-ai = { timestamp = "0001-01-01T00:00:00Z", span = "PT6H" }
+inspect-scout = { timestamp = "0001-01-01T00:00:00Z", span = "PT6H" }
+openai = { timestamp = "0001-01-01T00:00:00Z", span = "PT6H" }
 
 [[package]]
 name = "agent-client-protocol"
@@ -1014,7 +1024,7 @@ dependencies = [
     { name = "pyyaml" },
 ]
 
-[package.dev-dependencies]
+[package.optional-dependencies]
 dev = [
     { name = "inspect-scout" },
     { name = "mypy" },
@@ -1029,30 +1039,35 @@ dev = [
     { name = "types-pyyaml" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "inspect-charxiv", extra = ["dev"] },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "anthropic", specifier = ">=0.121.0" },
     { name = "datasets", specifier = ">=5.0.1" },
     { name = "inspect-ai", specifier = ">=0.3.158" },
+    { name = "inspect-scout", marker = "extra == 'dev'", specifier = ">=0.3.0" },
+    { name = "mypy", marker = "extra == 'dev'" },
     { name = "openai", specifier = ">=2.53.0" },
     { name = "platformdirs", specifier = ">=3.0.0" },
+    { name = "pre-commit", marker = "extra == 'dev'" },
+    { name = "pytest", marker = "extra == 'dev'" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'" },
+    { name = "pytest-dotenv", marker = "extra == 'dev'" },
+    { name = "pytest-mock", marker = "extra == 'dev'" },
     { name = "pyyaml", specifier = ">=5.1.0" },
+    { name = "rich", marker = "extra == 'dev'" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "==0.13.2" },
+    { name = "toml", marker = "extra == 'dev'" },
+    { name = "types-pyyaml", marker = "extra == 'dev'" },
 ]
+provides-extras = ["dev"]
 
 [package.metadata.requires-dev]
-dev = [
-    { name = "inspect-scout", specifier = ">=0.3.0" },
-    { name = "mypy" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-dotenv" },
-    { name = "pytest-mock" },
-    { name = "rich" },
-    { name = "ruff", specifier = "==0.13.2" },
-    { name = "toml" },
-    { name = "types-pyyaml" },
-]
+dev = [{ name = "inspect-charxiv", extras = ["dev"] }]
 
 [[package]]
 name = "inspect-scout"
@@ -1981,10 +1996,10 @@ resolution-markers = [
     "python_full_version == '3.14.*' and sys_platform == 'emscripten'",
     "python_full_version == '3.14.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and sys_platform == 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
     "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version == '3.12.*' and sys_platform == 'win32'",
+    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
     "python_full_version == '3.12.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/22/fd/89965aa4ac08c74998539fcbf24fa3540f3e15237fbeb6bcf9c908f4aade/numpy-2.5.1.tar.gz", hash = "sha256:a48a113e6afea91f5608793bafa7ef2ad481fefbda87ec5069f483de61cb9fa3", size = 20755553, upload-time = "2026-07-04T17:08:00.933Z" }

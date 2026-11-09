@@ -10,24 +10,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
         with:
+          persist-credentials: false
+      # Ruff only reads the source, so the project itself does not install.
+      - uses: meridianlabs-ai/actions/install-python-dependencies@3bc608093ab8b8dd7f82764a863d9d5f9dce61a5 # main
+        with:
+          versions: locked
           python-version: "3.12"
-          enable-cache: true
-      - run: uv sync --frozen
-      - run: uv run ruff check .
-      - run: uv run ruff format --check .
+          project-install: skip
+          extras: dev
+      - run: uv run --no-sync ruff check --output-format github .
+      - run: uv run --no-sync ruff format --check .
+      - name: Minimize uv cache
+        if: ${{ !cancelled() }}
+        run: uv cache prune --ci
 
   typecheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
         with:
+          persist-credentials: false
+      - uses: meridianlabs-ai/actions/install-python-dependencies@3bc608093ab8b8dd7f82764a863d9d5f9dce61a5 # main
+        with:
+          versions: locked
           python-version: "3.12"
-          enable-cache: true
-      - run: uv sync --frozen
-      - run: uv run mypy src
+          extras: dev
+      - run: uv run --no-sync mypy src
+      - name: Minimize uv cache
+        if: ${{ !cancelled() }}
+        run: uv cache prune --ci
 
   test:
     runs-on: ubuntu-latest
@@ -36,13 +48,18 @@ jobs:
         python-version: ["3.11", "3.14"]
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v6
         with:
+          persist-credentials: false
+      - uses: meridianlabs-ai/actions/install-python-dependencies@3bc608093ab8b8dd7f82764a863d9d5f9dce61a5 # main
+        with:
+          versions: locked
           python-version: ${{ matrix.python-version }}
-          enable-cache: true
+          extras: dev
       - uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
           key: hf-charxiv-${{ hashFiles('src/inspect_charxiv/dataset.py') }}
-      - run: uv sync --frozen
-      - run: uv run pytest
+      - run: uv run --no-sync pytest
+      - name: Minimize uv cache
+        if: ${{ !cancelled() }}
+        run: uv cache prune --ci
