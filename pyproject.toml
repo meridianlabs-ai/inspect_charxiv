@@ -187,10 +187,10 @@ required-version = ">=0.13.4"
 # Only resolve releases at least 7 days old (see README.md).
 exclude-newer = "7 days"
 
-# 6 hours only for direct dependencies that are a model provider SDK or an
-# Inspect package; see README.md.
+# 6 hours for direct dependencies that are a model provider SDK, and no
+# cooldown (false) for Inspect's own packages; see README.md.
 [tool.uv.exclude-newer-package]
 anthropic = "6 hours"
-inspect-ai = "6 hours"
-inspect-scout = "6 hours"
+inspect-ai = false
+inspect-scout = false
 openai = "6 hours"
