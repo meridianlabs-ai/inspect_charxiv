@@ -1,8 +1,9 @@
 """Tests for the dependency cooldown in pyproject.toml and the CI jobs around it.
 
 pyproject.toml holds back releases younger than seven days, or six hours for a
-list of model provider SDKs and Inspect packages. Dependabot applies the seven
-days to its uv.lock bumps and leaves that list to uv. CI installs from uv.lock.
+list of model provider SDKs. Inspect's own packages have no cooldown (false).
+Dependabot applies the seven days to its uv.lock bumps and leaves both lists to
+uv. CI installs from uv.lock.
 """
 
 import pathlib
@@ -21,6 +22,7 @@ SHARED_ACTIONS = "meridianlabs-ai/actions/"
 SHARED_INSTALLERS = ("setup-uv@", "install-python-dependencies@")
 INSTALL_ACTION = SHARED_ACTIONS + "install-python-dependencies@"
 EXEMPT_COOLDOWN = "6 hours"
+IN_HOUSE_PREFIXES = ("inspect-", "petri")
 
 
 def uv_config() -> dict[str, Any]:
@@ -46,12 +48,17 @@ def direct_dependencies() -> set[str]:
     }
 
 
+def in_house(package: str) -> bool:
+    """Whether the package is one of Inspect's or Petri's own."""
+    return normalize(package).startswith(IN_HOUSE_PREFIXES)
+
+
 def exempt_packages(config: dict[str, Any]) -> list[str]:
-    """The packages with a "6 hours" cooldown, sorted."""
+    """The packages with a "6 hours" or no (false) cooldown, sorted."""
     return sorted(
         package
         for package, cooldown in config["exclude-newer-package"].items()
-        if cooldown == EXEMPT_COOLDOWN
+        if cooldown == EXEMPT_COOLDOWN or cooldown is False
     )
 
 
@@ -107,11 +114,19 @@ def run_lines() -> list[tuple[str, str]]:
 def verify_exclude_newer_package(
     config: dict[str, Any], direct: set[str], now: datetime
 ) -> None:
-    """Check the cooldown and that each exception is "6 hours" or a fresh date."""
+    """Check the cooldown and each exception.
+
+    An in-house package must be false. Any other package must be "6 hours" or a
+    fresh date.
+    """
     assert config["exclude-newer"] == "7 days", config["exclude-newer"]
     for package, cooldown in config["exclude-newer-package"].items():
         assert normalize(package) in direct, f"{package} is not a direct dependency"
-        if cooldown != EXEMPT_COOLDOWN:
+        if in_house(package):
+            assert cooldown is False, f"in-house {package} must be false"
+        elif cooldown is False:
+            raise AssertionError(f"{package} is not in-house and can't be false")
+        elif cooldown != EXEMPT_COOLDOWN:
             age = now - datetime.fromisoformat(cooldown)
             assert timedelta(0) <= age < timedelta(days=7), (
                 f'dated entry {package} = "{cooldown}" is in the future or stale'
@@ -128,6 +143,22 @@ def test_non_direct_entry_is_caught() -> None:
     config = uv_config()
     config["exclude-newer-package"]["certifi"] = EXEMPT_COOLDOWN
     with pytest.raises(AssertionError, match="not a direct dependency"):
+        verify_exclude_newer_package(config, direct_dependencies(), datetime.now(UTC))
+
+
+def test_in_house_six_hours_is_caught() -> None:
+    """An in-house package with a "6 hours" cooldown fails."""
+    config = uv_config()
+    config["exclude-newer-package"]["inspect-ai"] = EXEMPT_COOLDOWN
+    with pytest.raises(AssertionError, match="in-house inspect-ai must be false"):
+        verify_exclude_newer_package(config, direct_dependencies(), datetime.now(UTC))
+
+
+def test_non_in_house_false_is_caught() -> None:
+    """A package that is not in-house with no cooldown (false) fails."""
+    config = uv_config()
+    config["exclude-newer-package"]["datasets"] = False
+    with pytest.raises(AssertionError, match="can't be false"):
         verify_exclude_newer_package(config, direct_dependencies(), datetime.now(UTC))
 
 
@@ -149,10 +180,10 @@ def test_dated_entry_age(age: timedelta, caught: bool) -> None:
 
 
 def test_dependabot_cooldown_matches_pyproject() -> None:
-    """Dependabot has the cooldown and the 6-hour list of pyproject.toml.
+    """Dependabot has the cooldown and the "6 hours" and false entries of pyproject.toml.
 
-    Dependabot's cooldown counts whole days, so it leaves the "6 hours" entries
-    to uv. Dated entries are locked by hand.
+    Dependabot's cooldown counts whole days, so it leaves the "6 hours" and
+    false entries to uv. Dated entries are locked by hand.
     """
     dependabot = dependabot_uv()
     assert dependabot["cooldown"]["default-days"] == 7
